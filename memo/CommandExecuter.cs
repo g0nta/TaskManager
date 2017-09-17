@@ -8,14 +8,11 @@ namespace memo
     public static class CommandExecuter
     {
         /// <summary>
-        /// タスクを名前で検索し、あればtrue, なければfalseを返す
+        /// タスクを名前で検索する
         /// </summary>
-        /// <returns><c>true</c>, if task by name was found, <c>false</c> otherwise.</returns>
-        /// <param name="name">Name.</param>
-        public static IEnumerable<Task> FindTaskByName(string name)
+        public static List<Task> FindTaskByName(List<Task> list, string name)
 		{
-			List<Task> list = ProjectCache.Cache[0].TaskList;
-            return list.Where(e => e.Name == name);
+            return list.Where(e => e.Name == name).ToList();
         }
 
         /// <summary>
@@ -23,20 +20,23 @@ namespace memo
         /// </summary>
         /// <returns><c>true</c>, if task by gen date was found, <c>false</c> otherwise.</returns>
         /// <param name="name">Name.</param>
-        public static bool FindTaskDate(DateTime key)
+        public static bool FindTaskDate(List<Task> list, DateTime key)
         {
             return false;
+        }
+
+        public static Task GenerateTask(string name, DateTime generateDateTime){
+            return new Task(0, name);
         }
 
         /// <summary>
         /// タスクを開始する
         /// </summary>
         /// <param name="name">Name.</param>
-        public static void StartTask(string name)
+        public static void StartTask(List<Task> list, string name, DateTime startDateTime)
         {
-            List<Task> list = ProjectCache.Cache[0].TaskList;
             //タスクないんなら終わり
-            if(FindTaskByName(name).Count()==0)
+            if(FindTaskByName(list, name).Count()==0)
             {
                 Console.WriteLine("指定したタスク「" + name + "」はありません。");
                 return;
@@ -52,7 +52,7 @@ namespace memo
 				return;
 			}
 
-            task.StartTime = DateTime.Now;
+            task.StartTime = startDateTime;
             task.State = TaskState.Started;
         }
 
@@ -61,12 +61,10 @@ namespace memo
         /// WorkingTimeの更新も行う
         /// </summary>
         /// <param name="name">Name.</param>
-        public static void HaltTask(string name)
+        public static void HaltTask(List<Task> list, string name, DateTime haltDateTime)
         {
-            List<Task> list = ProjectCache.Cache[0].TaskList;
-
 			//タスクないんなら終わり
-            if (FindTaskByName(name).Count()==0)
+            if (FindTaskByName(list, name).Count()==0)
 			{
 				Console.WriteLine("指定したタスク「" + name + "」はありません。");
 				return;
@@ -82,15 +80,14 @@ namespace memo
 				return;
 			}
 
-			DateTime now = DateTime.Now;
 			//停止されてた場合
 			if (task.RestartTime.HasValue)
 			{
-                task.WorkingTime += now - (DateTime)task.RestartTime;
+                task.WorkingTime += haltDateTime - (DateTime)task.RestartTime;
 			}
 			else
 			{
-                task.WorkingTime += now - (DateTime)task.StartTime;
+                task.WorkingTime += haltDateTime - (DateTime)task.StartTime;
 			}
 			task.State = TaskState.Halted;
 		}
@@ -99,18 +96,15 @@ namespace memo
         /// タスクを再開する。
         /// </summary>
         /// <param name="name">Name.</param>
-        public static void RestartTask(string name)
+        public static void RestartTask(List<Task> list, string name, DateTime restartDateTime)
         {
-            List<Task> list = ProjectCache.Cache[0].TaskList;
-
-            if(FindTaskByName(name).Count() == 0)
+            if(FindTaskByName(list, name).Count() == 0)
 			{
 				Console.WriteLine("指定したタスク「" + name + "」はありません。");
 				return;
             }
 
 			Task task = list.Find(e => e.Name == name);
-            DateTime now = DateTime.Now;
 
 			if (task.State != TaskState.Halted || task.State != TaskState.Comleted)
 			{
@@ -119,25 +113,22 @@ namespace memo
 				return;
 			}
 
-            task.RestartTime = now;
+            task.RestartTime = restartDateTime;
         }
 
 		/// <summary>
 		/// タスクを完了する
 		/// 開始状態でない または 再開状態でないなら完了にできない
 		/// </summary>
-		public static void CompleteTask(string name)
+        public static void CompleteTask(List<Task> list, string name, DateTime complateDateTime)
         {
-			List<Task> list = ProjectCache.Cache[0].TaskList;
-
-            if (FindTaskByName(name).Count() == 0)
+            if (FindTaskByName(list, name).Count() == 0)
 			{
 				Console.WriteLine("指定したタスク「" + name + "」はありません。");
 				return;
 			}
 
 			Task task = list.Find(e => e.Name == name);
-			DateTime now = DateTime.Now;
 
             if (task.State != TaskState.Started || task.State != TaskState.Restarted)
 			{
@@ -145,8 +136,42 @@ namespace memo
 				Console.WriteLine("今の状態：" + task.State);
 				return;
 			}
-            task.CompleteTime = DateTime.Now;
+            task.CompleteTime = complateDateTime;
             task.State = TaskState.Comleted;
 		}
+
+        /// <summary>
+        /// タスクを削除する。
+        /// 削除済みのタスクでない限り、状態による制限は設けない。
+        /// </summary>
+        /// <param name="list">List.</param>
+        /// <param name="name">Name.</param>
+        public static void DeleteTask(List<Task> list, string name)
+        {
+			if (FindTaskByName(list, name).Count() == 0)
+			{
+				Console.WriteLine("指定したタスク「" + name + "」はありません。");
+				return;
+			}
+
+			Task task = list.Find(e => e.Name == name);
+
+            if (task.State == TaskState.Deleted)
+			{
+				Console.WriteLine("削除済みのタスクです");
+				return;
+			}
+
+            task.State = TaskState.Deleted;
+		}
+
+        /// <summary>
+        /// タスクにメモを追加する
+        /// </summary>
+        /// <param name="list">List.</param>
+        /// <param name="name">Name.</param>
+        public static void AddMemo(List<Task>list, string name){
+            
+        }
     }
 }
