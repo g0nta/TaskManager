@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "memo", "memo\memo.csproj", "{7D0A0FC2-F77F-4A5D-BA1D-AF15B73E3F64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{EA2DD6E2-78C8-44BE-877C-667A95158CCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D0A0FC2-F77F-4A5D-BA1D-AF15B73E3F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0A0FC2-F77F-4A5D-BA1D-AF15B73E3F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0A0FC2-F77F-4A5D-BA1D-AF15B73E3F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0A0FC2-F77F-4A5D-BA1D-AF15B73E3F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2DD6E2-78C8-44BE-877C-667A95158CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2DD6E2-78C8-44BE-877C-667A95158CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2DD6E2-78C8-44BE-877C-667A95158CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2DD6E2-78C8-44BE-877C-667A95158CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
