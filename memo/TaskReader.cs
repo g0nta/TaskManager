@@ -12,17 +12,17 @@ namespace memo
     /// </summary>
     public static class TaskReader
     {
-        private static string FilePath = Config.FilePath;
+        private static string filePath = Config.FilePath;
 
         public static List<Project> Read()
         {
             List<Project> projects = new List<Project>();
             List<Task> tasks = new List<Task>();
             string json;
-            //var reader = new StreamReader(FilePath);
+
             try
             {
-                using(var reader = new StreamReader(FilePath))
+                using(var reader = new StreamReader(filePath))
 				{
 					json = reader.ReadToEnd();
                 }

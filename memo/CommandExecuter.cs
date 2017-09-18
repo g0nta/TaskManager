@@ -8,9 +8,28 @@ namespace memo
     public static class CommandExecuter
     {
         /// <summary>
-        /// タスクを名前で検索する
+        /// Shows all tasks.
         /// </summary>
-        public static List<Task> FindTaskByName(List<Task> list, string name)
+        /// <param name="list">List.</param>
+        public static void ShowAllTasks(List<Task> list)
+        {
+            Console.WriteLine("Task Name | Generated Time | State");
+            foreach(Task task in list)
+            {
+                Console.WriteLine(task.Name + " | " + task.GeneratedTime.Date + " | " + GetStateString(task.State) );
+            }
+        }
+
+        public static void ShowTaskDetail(List<Task> list, string name)
+        {
+            
+        }
+
+		/// <summary>
+		/// findコマンドの実行
+		/// タスクを名前で検索する
+		/// </summary>
+		public static List<Task> FindTaskByName(List<Task> list, string name)
 		{
             return list.Where(e => e.Name == name).ToList();
         }
@@ -172,6 +191,26 @@ namespace memo
         /// <param name="name">Name.</param>
         public static void AddMemo(List<Task>list, string name){
             
+        }
+
+        private static string GetStateString(TaskState state)
+        {
+            switch(state){
+                case TaskState.Waiting:
+                    return "Generated";
+                case TaskState.Started:
+                    return "Started";
+                case TaskState.Halted:
+                    return "Halted";
+                case TaskState.Restarted:
+                    return "Restarted";
+                case TaskState.Comleted:
+                    return "Completed";
+                case TaskState.Deleted:
+                    return "Deleted";
+                default:
+                    return "Unknown";
+            }
         }
     }
 }
