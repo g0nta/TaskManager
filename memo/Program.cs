@@ -13,15 +13,15 @@ namespace memo
                 return;
             }
             if(args.Length != 2){
-                Console.WriteLine("警告メッセージ");
+                Console.WriteLine("エラーメッセージ");
                 return;
             }
 
             string cmd = args[0];
             string taskName = args[1];
 
-            TaskReader.Read();
-            List<Task> list = ProjectCache.Cache[0].TaskList;
+            List<Project> projects = TaskReader.Read();
+            List<Task> list = projects[0].TaskList;
 
 			DateTime now = DateTime.Now;
 
@@ -44,6 +44,7 @@ namespace memo
 				case "new":
 				case "-n":
 					Task task = CommandExecuter.GenerateTask(taskName, now);
+                    list.Add(task);
 					break;
 				case "start":
 				case "-s":

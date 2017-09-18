@@ -12,33 +12,23 @@ namespace memo
 
         public static void Write(List<Task> list)
         {
-            //ProjectCache使ってるせいでテストが辛い
-            if(File.Exists(filePath)){
-                File.Create(filePath);
+            if(!File.Exists(filePath)){
+                File.Create(filePath).Close();
             }
             string taskListJsonString = JsonConvert.SerializeObject(list,Formatting.Indented);
+            //var writer = new StreamWriter(filePath);
 			try
 			{
-				using (StreamWriter writer = new StreamWriter(filePath))
+                using(var writer = new StreamWriter(filePath))
 				{
-                    writer.WriteLine(taskListJsonString);
-				}
+					writer.Write(taskListJsonString);
+                }
 
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
 			}
-        }
-
-        public static void InsertTask(Task task)
-        {
-            string taskJsonString
-                = JsonConvert.SerializeObject(task);
-
-        }
-        public static bool UpdateTask(Task task){
-            return true;
         }
     }
 }

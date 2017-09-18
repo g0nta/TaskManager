@@ -8,32 +8,37 @@ namespace memo
 {
     /// <summary>
     /// ファイルからタスクを読み込んでキャッシュに保存する
+    /// 将来的にはprojectも読み込むようにする
     /// </summary>
     public static class TaskReader
     {
         private static string FilePath = Config.FilePath;
 
-        public static void Read()
+        public static List<Project> Read()
         {
             List<Project> projects = new List<Project>();
             List<Task> tasks = new List<Task>();
-            string line;
-            try{
+            string json;
+            //var reader = new StreamReader(FilePath);
+            try
+            {
                 using(var reader = new StreamReader(FilePath))
-                {
-                    while((line = reader.ReadLine()) != null)
-                    {
-                        Task task = (Task)JsonConvert.DeserializeObject(line);
-                        tasks.Add(task);
-                    }
+				{
+					json = reader.ReadToEnd();
                 }
 
+                tasks = JsonConvert.DeserializeObject<List<Task>>(json);
+
                 Project project = new Project();
-                project.TaskList = tasks;
+                project.TaskList = tasks == null ? new List<Task>() : tasks;
                 projects.Add(project);
-                ProjectCache.Cache = projects;
-            }catch(Exception e){
+
+                return projects;
+            }
+            catch(Exception e)
+            {
                 Console.WriteLine(e.Message);
+                return null;
             }
         }
     }
